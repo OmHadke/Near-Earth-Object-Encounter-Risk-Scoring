@@ -2,70 +2,91 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>NEO Hazard Risk Prediction</title>
-    <style>
-        body {
-            background-color: #0b0c10;
-            color: #c5c6c7;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 40px;
-        }
-        h1 {
-            color: #66fcf1;
-        }
-        form {
-            margin-top: 30px;
-            display: inline-block;
-            text-align: left;
-        }
-        input {
-            width: 100%;
-            padding: 6px;
-            margin: 4px 0;
-        }
-        button {
-            background-color: #45a29e;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #66fcf1;
-            color: black;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 1.2em;
-            /* static fallback color; dynamic color applied inline on the element */
-            color: #c5c6c7;
-        }
-    </style>
+    <title>NEO Hazard Risk Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #0b0c10;
+        color: #c5c6c7;
+        font-family: "Segoe UI", sans-serif;
+        text-align: center;
+        padding: 40px;
+    }
+    .container {
+        max-width: 800px;
+        background-color: #1f2833;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+    h1 {
+        color: #66fcf1;
+        margin-bottom: 20px;
+    }
+    label {
+        color: #66fcf1;
+    }
+    .risk-bar {
+        width: 100%;
+        height: 25px;
+        border-radius: 10px;
+        margin-top: 15px;
+    }
+    .chart {
+        margin-top: 40px;
+    }
+</style>
+
+    
 </head>
 <body>
-    <h1>🌌 Near-Earth Object Risk Predictor</h1>
-    <form method="POST" action="/predict">
-        {% for feature in ['H','albedo','diameter_sigma','e','a','i',
-                           'absolute_magnitude_h','estimated_diameter_min_km',
-                           'estimated_diameter_max_km','relative_velocity_km_per_s','miss_distance_km'] %}
-            <label>{{ feature }}:</label><br>
-            <input type="number" name="{{ feature }}" step="any" required><br>
-        {% endfor %}
-        <button type="submit">Predict</button>
-    </form>
-    
-    {% if result %}
-        <div class="result" id="result-box">
-            <p><strong>Prediction:</strong> {{ result }}</p>
-            <p><strong>Risk Score:</strong> {{ risk }}</p>
+    <div class="container">
+        <h1>🌌 Near-Earth Object Risk Predictor</h1>
+        <form method="POST" action="/predict" class="text-start">
+            {% set examples = {
+                'H': 'e.g. 22',
+                'albedo': 'e.g. 0.05 - 0.5',
+                'diameter_sigma': 'e.g. 0.01 - 0.5',
+                'e': 'e.g. 0.0 - 1.0',
+                'a': 'e.g. 0.5 - 5.0 (AU)',
+                'i': 'e.g. 0 - 180 (deg)',
+                'absolute_magnitude_h': 'e.g. 20 - 30',
+                'estimated_diameter_min_km': 'e.g. 0.01 - 1.0',
+                'estimated_diameter_max_km': 'e.g. 0.02 - 2.0',
+                'relative_velocity_km_per_s': 'e.g. 0 - 40',
+                'miss_distance_km': 'e.g. 1e3 - 1e8'
+            } %}
+
+            <div class="row">
+                {% for feature in ['H','albedo','diameter_sigma','e','a','i',
+                                   'absolute_magnitude_h','estimated_diameter_min_km',
+                                   'estimated_diameter_max_km','relative_velocity_km_per_s','miss_distance_km'] %}
+                    <div class="col-md-6 mb-3">
+                        <label>{{ feature }}:</label>
+                        <input type="number" name="{{ feature }}" step="any" class="form-control" placeholder="{{ examples[feature] }}" aria-label="{{ feature }}" required>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-info w-100 mt-3">Predict Risk</button>
+        </form>
+
+        {% if risk %}
+        <div class="mt-4">
+            <h4>Prediction: <span style="color:white">{{ status }}</span></h4>
+            <p>Risk Score: {{ risk }}%</p>
+            <div class="risk-bar" style="background-color: wheat; width: 15%;"></div>
         </div>
-        <script>
-            document.getElementById('result-box').style.color = '{{ color | default("#c5c6c7") }}';
-        </script>
-    {% elif error %}
-        <div class="result" style="color: red;">Error: {{ error }}</div>
-    {% endif %}
+        {% elif error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+
+        {% if chart %}
+        <div class="chart">
+            <h4 class="mt-4">Top 10 Most Risky NEOs (Based on Dataset)</h4>
+            <img src="{{ chart }}" class="img-fluid rounded shadow mt-2" alt="Top Risky NEOs Chart">
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>
