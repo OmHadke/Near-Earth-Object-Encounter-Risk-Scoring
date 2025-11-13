@@ -4,5 +4,5 @@ Risk assessment of Near-Earth Objects (NEOs) is important because it is the foun
 This project aims to develop an ML-based risk scoring model that predicts or classifies potential hazard levels using NASA’s CNEOS and NEA datasets.
 
 
-**Live App:** [neo-risk-predictor.onrender.com](https://neo-risk-predictor.onrender.com)
+**Live App:** [neo-risk-predictor.onrender.com](https://near-earth-object-encounter-risk-scoring.onrender.com/)
 
