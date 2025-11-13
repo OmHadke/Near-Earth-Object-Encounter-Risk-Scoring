@@ -3,4 +3,6 @@ Near-Earth Objects (NEOs) are asteroids and comets with orbits that bring them c
 Risk assessment of Near-Earth Objects (NEOs) is important because it is the foundational step for planetary defense, enabling humanity to identify potential impact threats, predict their consequences, and develop and implement strategies to prevent or mitigate a potential disaster.
 This project aims to develop an ML-based risk scoring model that predicts or classifies potential hazard levels using NASA’s CNEOS and NEA datasets.
 
-[![Render Deploy](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+**Live App:** [neo-risk-predictor.onrender.com](https://neo-risk-predictor.onrender.com)
+
